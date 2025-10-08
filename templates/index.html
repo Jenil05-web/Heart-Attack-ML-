@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Heart Attack Risk Predictor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f4f8;
+            min-height: 100vh;
+            padding-bottom: 40px;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 18px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-brand {
+            font-size: 22px;
+            font-weight: 700;
+            color: #2563eb;
+        }
+
+        .navbar-menu {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: #4b5563;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 15px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #2563eb;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 35px;
+            border-radius: 12px;
+            max-width: 600px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .close {
+            color: #9ca3af;
+            float: right;
+            font-size: 32px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 20px;
+        }
+
+        .close:hover {
+            color: #4b5563;
+        }
+
+        .modal h2 {
+            color: #2563eb;
+            margin-bottom: 20px;
+            font-size: 26px;
+        }
+
+        .modal p {
+            color: #4b5563;
+            line-height: 1.8;
+            margin-bottom: 15px;
+            font-size: 15px;
+        }
+
+        .modal ul {
+            margin-left: 20px;
+            color: #4b5563;
+            line-height: 1.8;
+        }
+
+        .modal ul li {
+            margin-bottom: 8px;
+        }
+
+        /* Container */
+        .container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            max-width: 600px;
+            width: 100%;
+            margin: 40px auto;
+            padding: 40px;
+        }
+
+        h1 {
+            color: #1f2937;
+            margin-bottom: 10px;
+            font-size: 28px;
+            text-align: center;
+        }
+
+        .subtitle {
+            color: #6b7280;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            color: #374151;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .input-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            color: #374151;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            background: #f9fafb;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #2563eb;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .info {
+            color: #6b7280;
+            font-size: 12px;
+            margin-top: 4px;
+            display: block;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+        }
+
+        button {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+        }
+
+        button[type="submit"] {
+            background: #2563eb;
+            color: white;
+        }
+
+        button[type="submit"]:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
+        }
+
+        button[type="button"] {
+            background: white;
+            color: #2563eb;
+            border: 2px solid #2563eb;
+        }
+
+        button[type="button"]:hover {
+            background: #eff6ff;
+        }
+
+        .medical-highlight {
+            background: #eff6ff;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #2563eb;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px;
+                margin: 20px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .navbar-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <div class="navbar-brand">❤️ Heart Risk Predictor</div>
+            <div class="navbar-menu">
+                <a href="/" class="nav-link">Home</a>
+                <a onclick="openModal()" class="nav-link">About</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- About Modal -->
+    <div id="aboutModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>About This Project</h2>
+            <p><strong>Heart Attack Risk Predictor</strong> is a machine learning-based application designed to assess
+                the risk of heart attacks using logistic regression.</p>
+
+            <p>This system analyzes various health parameters including:</p>
+            <ul>
+                <li>Personal information (age, gender)</li>
+                <li>Vital signs (heart rate, blood pressure, blood sugar)</li>
+                <li>Cardiac biomarkers (CK-MB and Troponin levels)</li>
+            </ul>
+
+            <p>The model has been trained on medical data to identify patterns associated with heart attack risk. By
+                inputting your health metrics, the system provides a prediction to help raise awareness about
+                cardiovascular health.</p>
+
+            <p><strong>Made By : Jenil Joshi</strong></p>
+            <p><strong>Contact : jeniljoshi56@gmail.com</strong></p>
+            <p><strong>Linkedin : <a href="https://www.linkedin.com/in/jenil-joshi-b07948301" target="_blank">Jenil
+                        Joshi</a></strong></p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>❤️ Heart Attack Risk Predictor</h1>
+        <p class="subtitle">Enter your information below to assess your heart attack risk. Medical values can be filled
+            with typical normal ranges if unknown.</p>
+
+        <form action="{{ url_for('predict') }}" method="post">
+            <div class="form-section">
+                <div class="section-title">Personal Information</div>
+
+                <div class="input-group">
+                    <label for="age">Age</label>
+                    <input type="text" id="age" name="Age" placeholder="Enter your age" required="required" />
+                </div>
+
+                <div class="input-group">
+                    <label for="gender">Gender</label>
+                    <input type="text" id="gender" name="Gender" placeholder="0 for Female, 1 for Male"
+                        required="required" />
+                    <span class="info">Enter 0 for Female or 1 for Male</span>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <div class="section-title">Vital Signs</div>
+
+                <div class="input-group">
+                    <label for="heartrate">Heart Rate</label>
+                    <input type="text" id="heartrate" name="Heart rate" placeholder="e.g., 75" required="required" />
+                    <span class="info">Normal range: 60-100 bpm</span>
+                </div>
+
+                <div class="input-group">
+                    <label for="systolic">Systolic Blood Pressure</label>
+                    <input type="text" id="systolic" name="Systolic blood pressure" placeholder="e.g., 120"
+                        required="required" />
+                    <span class="info">Normal: below 120 mmHg</span>
+                </div>
+
+                <div class="input-group">
+                    <label for="diastolic">Diastolic Blood Pressure</label>
+                    <input type="text" id="diastolic" name="Diastolic blood pressure" placeholder="e.g., 80"
+                        required="required" />
+                    <span class="info">Normal: below 80 mmHg</span>
+                </div>
+
+                <div class="input-group">
+                    <label for="bloodsugar">Blood Sugar</label>
+                    <input type="text" id="bloodsugar" name="Blood sugar" placeholder="e.g., 100" required="required" />
+                    <span class="info">Normal fasting: 70-100 mg/dL</span>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <div class="section-title">Cardiac Biomarkers</div>
+                <div class="medical-highlight">
+                    <div class="input-group">
+                        <label for="ckmb">CK-MB Level</label>
+                        <input type="text" id="ckmb" name="CK-MB" placeholder="e.g., 3.0" required="required" />
+                        <span class="info">Normal range: below 5 ng/mL</span>
+                    </div>
+
+                    <div class="input-group" style="margin-bottom: 0;">
+                        <label for="troponin">Troponin Level</label>
+                        <input type="text" id="troponin" name="Troponin" placeholder="e.g., 0.02" required="required" />
+                        <span class="info">Normal range: below 0.04 ng/mL</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button type="button" onclick="useNormalValues()">Use Normal Values</button>
+                <button type="submit">Predict Risk</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function useNormalValues() {
+            document.getElementById('ckmb').value = '3';
+            document.getElementById('troponin').value = '0.02';
+        }
+
+        function openModal() {
+            document.getElementById('aboutModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('aboutModal').style.display = 'none';
+        }
+
+        // Close modal when clicking outside of it
+        window.onclick = function (event) {
+            var modal = document.getElementById('aboutModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
+
+</body>
+
+</html>

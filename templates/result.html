@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Prediction Result</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f4f8;
+            min-height: 100vh;
+            padding-bottom: 40px;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 18px 0;
+            margin-bottom: 40px;
+        }
+
+        .navbar-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-brand {
+            font-size: 22px;
+            font-weight: 700;
+            color: #2563eb;
+        }
+
+        .container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            max-width: 700px;
+            width: 100%;
+            margin: 0 auto 30px;
+            padding: 40px;
+        }
+
+        .result-section {
+            text-align: center;
+            padding-bottom: 30px;
+            border-bottom: 2px solid #e5e7eb;
+            margin-bottom: 30px;
+        }
+
+        .icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: #1f2937;
+            font-size: 24px;
+            line-height: 1.5;
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+
+        .back-button {
+            display: inline-block;
+            padding: 12px 28px;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
+        }
+
+        .tips-section {
+            margin-top: 30px;
+        }
+
+        .tips-title {
+            color: #1f2937;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .tip-card {
+            background: #eff6ff;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #2563eb;
+        }
+
+        .tip-card h3 {
+            color: #1f2937;
+            font-size: 16px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tip-card p {
+            color: #4b5563;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .info-section {
+            background: #fef3c7;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #f59e0b;
+            margin-bottom: 25px;
+        }
+
+        .info-section h3 {
+            color: #92400e;
+            font-size: 16px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .info-section p {
+            color: #78350f;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 8px;
+        }
+
+        .info-section ul {
+            margin-left: 20px;
+            color: #78350f;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .disclaimer {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f3f4f6;
+            border-radius: 8px;
+            color: #4b5563;
+            font-size: 13px;
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+                margin: 0 15px 30px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            .tips-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .navbar-content {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <div class="navbar-brand">❤️ Heart Risk Predictor</div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="result-section">
+            <div class="icon">🏥</div>
+            <h1>{{ prediction_text }}</h1>
+            <a href="/" class="back-button">← Make Another Prediction</a>
+        </div>
+
+
+        <ul>
+            <li>Chest pain or discomfort</li>
+            <li>Shortness of breath</li>
+            <li>Pain in arms, neck, jaw, or back</li>
+            <li>Nausea, lightheadedness, or cold sweats</li>
+        </ul>
+    </div>
+
+    <div class="tips-section">
+        <div class="tips-title">
+            <span>💚</span>
+            <span>Tips for a Healthy Heart</span>
+        </div>
+
+        <div class="tips-grid">
+            <div class="tip-card">
+                <h3>🥗 Eat Heart-Healthy</h3>
+                <p>Focus on fruits, vegetables, whole grains, lean proteins, and healthy fats. Limit saturated fats,
+                    sodium, and added sugars. The Mediterranean diet is excellent for heart health.</p>
+            </div>
+
+            <div class="tip-card">
+                <h3>🚭 Avoid Smoking</h3>
+                <p>Smoking is a major risk factor for heart disease. Quitting smoking significantly reduces your
+                    risk. Avoid secondhand smoke as well.</p>
+            </div>
+
+            <div class="tip-card">
+                <h3>⚖️ Maintain Healthy Weight</h3>
+                <p>Keep your BMI in a healthy range. Even losing 5-10% of your body weight can significantly improve
+                    heart health if you're overweight.</p>
+            </div>
+
+            <div class="tip-card">
+                <h3>😴 Get Quality Sleep</h3>
+                <p>Aim for 7-9 hours of sleep per night. Poor sleep is linked to high blood pressure, obesity, and
+                    increased heart disease risk.</p>
+            </div>
+
+           
+
+
+        </div>
+    </div>
+
+
+    </div>
+</body>
+
+</html>
